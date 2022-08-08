@@ -225,6 +225,9 @@ export default class TemplateRenderer {
     // https://github.com/vuejs/vue/pull/10794/files
     const shouldRenderAsyncScripts = this.options.shouldRenderAsyncScripts !== false
 
+    // FIXME:
+    console.log('shouldRenderAsyncScripts:', shouldRenderAsyncScripts);
+
     if (this.clientManifest) {
       const initial = this.preloadFiles.filter(({ file }) => isJS(file))
       const async = ((shouldRenderAsyncScripts && this.getUsedAsyncFiles(context)) || []).filter(({ file }) => isJS(file))

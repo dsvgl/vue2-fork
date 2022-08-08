@@ -9092,6 +9092,9 @@ TemplateRenderer.prototype.renderScripts = function renderScripts (context) {
   // https://github.com/vuejs/vue/pull/10794/files
   var shouldRenderAsyncScripts = this.options.shouldRenderAsyncScripts !== false;
 
+  // FIXME:
+  console.log('shouldRenderAsyncScripts:', shouldRenderAsyncScripts);
+
   if (this.clientManifest) {
     var initial = this.preloadFiles.filter(function (ref) {
         var file = ref.file;
