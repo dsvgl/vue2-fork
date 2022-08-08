@@ -16,6 +16,7 @@ type TemplateRendererOptions = {
   clientManifest?: ClientManifest;
   shouldPreload?: (file: string, type: string) => boolean;
   shouldPrefetch?: (file: string, type: string) => boolean;
+  shouldRenderAsyncScripts?: boolean;
   serializer?: Function;
 };
 
@@ -55,7 +56,7 @@ export default class TemplateRenderer {
     this.inject = options.inject !== false
     // if no template option is provided, the renderer is created
     // as a utility object for rendering assets like preload links and scripts.
-    
+
     const { template } = options
     this.parsedTemplate = template
       ? typeof template === 'string'
@@ -221,9 +222,12 @@ export default class TemplateRenderer {
   }
 
   renderScripts (context: Object): string {
+    // https://github.com/vuejs/vue/pull/10794/files
+    const shouldRenderAsyncScripts = this.options.shouldRenderAsyncScripts !== false
+
     if (this.clientManifest) {
       const initial = this.preloadFiles.filter(({ file }) => isJS(file))
-      const async = (this.getUsedAsyncFiles(context) || []).filter(({ file }) => isJS(file))
+      const async = ((shouldRenderAsyncScripts && this.getUsedAsyncFiles(context)) || []).filter(({ file }) => isJS(file))
       const needed = [initial[0]].concat(async, initial.slice(1))
       return needed.map(({ file }) => {
         return `<script src="${this.publicPath}${file}" defer></script>`
